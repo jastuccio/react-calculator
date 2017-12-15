@@ -1,7 +1,7 @@
-import http from "http";
-import fs from "fs";
-import url from "url";
-import path from "path";
+import http from 'http';
+import fs from 'fs';
+import url from 'url';
+import path from 'path';
 
 /**
  * Function to be used as a callback to our http.createServer method
@@ -11,7 +11,7 @@ function requestHandler(request, response) {
   // resolve the path to the requested resource and assign it to a variable
   let requestedResource = path.join(
     __dirname, // current directory where server.js is found
-    "../public", // step out of this directory into the public directory
+    '../public', // step out of this directory into the public directory
     url.parse(request.url).pathname // path to resource requested by client
   );
 
@@ -20,8 +20,8 @@ function requestHandler(request, response) {
   fs.exists(requestedResource, function(exists) {
     // check if file does't exist and return a 404 status (File not found)
     if (!exists) {
-      response.writeHead(404, { "Content-Type": "text/plain" });
-      response.write("404 Not Found\n");
+      response.writeHead(404, { 'Content-Type': 'text/plain' });
+      response.write('404 Not Found\n');
       response.end();
       return;
     }
@@ -29,22 +29,22 @@ function requestHandler(request, response) {
     // Check if the reqested resource is a directory. If it is, just set our
     // index.html page as the requested resource.
     if (fs.statSync(requestedResource).isDirectory()) {
-      requestedResource += "/index.html";
+      requestedResource += '/index.html';
     }
 
     // Finally, we read the requested file (asynchronously) and send it's
     // content to the client
     fs.readFile(
       requestedResource, // path to requested resource
-      "binary", // read the requested resource as a binary file
+      'binary', // read the requested resource as a binary file
       function(err, file) {
         // call back function to handle end of file reading
 
         // If an error occured while reading the file, send the error message
         // with a status code of 500 (Internal server error)
         if (err) {
-          response.writeHead(500, { "Content-Type": "text/plain" });
-          response.write(err + "\n");
+          response.writeHead(500, { 'Content-Type': 'text/plain' });
+          response.write(err + '\n');
           response.end();
           return;
         }
@@ -52,9 +52,9 @@ function requestHandler(request, response) {
         // Helper object to map requested content types (extension) to response
         // mime types
         const contentTypesByExtension = {
-          ".html": "text/html",
-          ".css": "text/css",
-          ".js": "text/javascript"
+          '.html': 'text/html',
+          '.css': 'text/css',
+          '.js': 'text/javascript'
         };
 
         // Helper object to hold our headers
@@ -66,11 +66,11 @@ function requestHandler(request, response) {
         // if the requested resource maps to any of our content type extension,
         // then set the Content-Type field for our response headers.
         if (contentType) {
-          headers["Content-Type"] = contentType;
+          headers['Content-Type'] = contentType;
         }
 
         response.writeHead(200, headers); // write response header (if any)
-        response.write(file, "binary"); // write content of read file (binary format)
+        response.write(file, 'binary'); // write content of read file (binary format)
         response.end(); // send response and close request
       }
     );
